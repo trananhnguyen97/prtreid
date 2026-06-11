@@ -1,10 +1,27 @@
 import os
 import cv2
-import wandb
-import matplotlib.pyplot as plt
 from typing import Optional
-from pandas.io.json._normalize import nested_to_record
-from torch.utils.tensorboard import SummaryWriter
+
+# Optional training/observability deps — not required at inference time.
+try:
+    import wandb
+except ImportError:
+    wandb = None
+
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    plt = None
+
+try:
+    from pandas.io.json._normalize import nested_to_record
+except (ImportError, AttributeError):
+    nested_to_record = None
+
+try:
+    from torch.utils.tensorboard import SummaryWriter
+except (ImportError, AttributeError):
+    SummaryWriter = None
 
 
 class Logger:
