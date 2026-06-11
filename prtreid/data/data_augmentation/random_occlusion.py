@@ -5,13 +5,24 @@ import random
 import sys
 import xml.etree.ElementTree
 import numpy as np
-import matplotlib.pyplot as plt
-import skimage.data
 import cv2
 import PIL.Image
-from albumentations import (
-    DualTransform, functional
-)
+# matplotlib, skimage, and albumentations.functional are training-only deps.
+# Import them lazily inside the methods that need them so importing this module
+# at inference time doesn't require these packages to be installed.
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    plt = None
+try:
+    import skimage.data
+except ImportError:
+    skimage = None
+from albumentations import DualTransform
+try:
+    from albumentations import functional
+except ImportError:
+    functional = None
 
 
 def main():
