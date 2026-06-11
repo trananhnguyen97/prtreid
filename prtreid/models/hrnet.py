@@ -590,7 +590,7 @@ class HighResolutionNet(nn.Module):
             raise FileNotFoundError(f'HRNet-W32-C pretrained weights not found under "{pretrained_path}", please download it '
                                     f'first at https://github.com/HRNet/HRNet-Image-Classification or specify the correct '
                                     f'weights dir location with the cfg.model.bpbreid.hrnet_pretrained_path config.')
-        pretrained_dict = torch.load(pretrained_path)
+        pretrained_dict = torch.load(pretrained_path, weights_only=False)  # PyTorch 2.6+ compat
         print('=> loading pretrained model {}'.format(pretrained_path))
         model_dict = self.state_dict()
         pretrained_dict = {k: v for k, v in pretrained_dict.items()
