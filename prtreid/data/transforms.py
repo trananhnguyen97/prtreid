@@ -3,10 +3,17 @@ from __future__ import division, print_function, absolute_import
 import cv2
 import torch
 import numpy as np
-from albumentations import (
-    Resize, Compose, Normalize, ColorJitter, HorizontalFlip, CoarseDropout, RandomCrop, PadIfNeeded
-)
-from albumentations.pytorch import ToTensorV2
+# albumentations is a training-only dep. Import lazily so this module can be
+# imported at inference time even if albumentations is not installed or is an
+# incompatible version.
+try:
+    from albumentations import (
+        Resize, Compose, Normalize, ColorJitter, HorizontalFlip, CoarseDropout, RandomCrop, PadIfNeeded
+    )
+    from albumentations.pytorch import ToTensorV2
+except ImportError:
+    Resize = Compose = Normalize = ColorJitter = HorizontalFlip = None
+    CoarseDropout = RandomCrop = PadIfNeeded = ToTensorV2 = None
 from prtreid.data.masks_transforms import masks_preprocess_all, AddBackgroundMask, ResizeMasks, PermuteMasksDim, \
     RemoveBackgroundMask
 from prtreid.data.data_augmentation import RandomOcclusion
